@@ -64,7 +64,11 @@ export default function CryptoPaymentForm() {
       }),
     })
       .then((res) => res.json())
-      .then((data) => router.push(`/resume?${data.identifier}`));
+      .then((data) =>
+        router.push(
+          `/resume?id=${data.identifier}&qr=${data.payment_uri}&concept=${values.concept}`
+        )
+      );
   };
 
   return (

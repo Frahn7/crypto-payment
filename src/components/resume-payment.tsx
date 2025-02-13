@@ -45,9 +45,10 @@ function CurrencyIcon() {
 
 interface ResumeProps {
   dataPayment?: Payment;
+  concept?: string;
 }
 
-export const ResumePayment = ({ dataPayment }: ResumeProps) => {
+export const ResumePayment = ({ dataPayment, concept }: ResumeProps) => {
   return (
     <div className="w-full h-[418px] flex flex-col gap-6 mt-[-130px]">
       <p className="font-bold text-xl/6 text-primary">Resumen del pedido</p>
@@ -91,7 +92,7 @@ export const ResumePayment = ({ dataPayment }: ResumeProps) => {
         <div className="text-primary font-bold text-[16px]/[16px] flex flex-row justify-between px-[10px] ">
           <p>Concepto</p>
           <p className="flex flex-row items-center font-semibold text-[16px]/5">
-            Viajes & Ocio
+            {concept}
           </p>
         </div>
       </div>

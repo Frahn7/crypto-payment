@@ -14,21 +14,20 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ expiredTime }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (timeLeft === 0) router.push("/payment?RE");
+    if (timeLeft === 0) {
+      router.push("/payment?RE");
+      return;
+    }
 
     const interval = setInterval(() => {
       setTimeLeft(() => {
         const newTime = calculateTimeLeft();
-        if (newTime <= 0) {
-          clearInterval(interval);
-          return 0;
-        }
-        return newTime;
+        return newTime <= 0 ? 0 : newTime;
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [expiredTime]);
+  }, [timeLeft]);
 
   const formatTime = (seconds: number): string => {
     const minutes = Math.floor(seconds / 60);

@@ -23,6 +23,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Spinner } from "./ui/spinner";
+import { useMutation } from "@tanstack/react-query";
 
 const X_DEVICE_ID = process.env.NEXT_PUBLIC_X_DEVICE_ID;
 
@@ -50,25 +51,44 @@ export default function CryptoPaymentForm() {
     mode: "onBlur",
   });
 
+  const createOrder = async (values: FormValues) => {
+    const response = await fetch(
+      "https://payments.pre-bnvo.com/api/v1/orders/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Device-Id": X_DEVICE_ID!,
+        },
+        body: JSON.stringify({
+          expected_output_amount: values.amount,
+          input_currency: values.currency,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al crear la orden");
+    }
+
+    return response.json();
+  };
+
+  const mutation = useMutation({
+    mutationFn: createOrder,
+    onSuccess: (data, variables) => {
+      router.push(
+        `/resume?id=${data.identifier}&qr=${data.payment_uri}&concept=${variables.concept}`
+      );
+    },
+    onError: (error) => {
+      console.error("Error:", error);
+    },
+  });
+
   const onSubmit = (values: FormValues) => {
     setloading(true);
-    fetch("https://payments.pre-bnvo.com/api/v1/orders/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Device-Id": X_DEVICE_ID!,
-      },
-      body: JSON.stringify({
-        expected_output_amount: values.amount,
-        input_currency: values.currency,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) =>
-        router.push(
-          `/resume?id=${data.identifier}&qr=${data.payment_uri}&concept=${values.concept}`
-        )
-      );
+    mutation.mutate(values);
   };
 
   return (

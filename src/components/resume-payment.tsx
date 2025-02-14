@@ -63,7 +63,8 @@ export const ResumePayment = ({ dataPayment, concept }: ResumeProps) => {
         <div className="text-primary font-bold text-[16px]/[16px] flex flex-row justify-between border-b pb-[26px] border-[#C0CCDA]">
           <p>Moneda seleccionada:</p>
           <p className="flex flex-row items-center font-semibold text-[16px]/5">
-            <CurrencyIcon /> <span className="ml-1">XRP</span>
+            <CurrencyIcon />{" "}
+            <span className="ml-1">{dataPayment?.currency_id}</span>
           </p>
         </div>
 

@@ -90,12 +90,23 @@ export const Pay = ({
   crypto_amount: number;
 }) => {
   const [loading, setloading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
       setloading(false);
     }, 2000);
   }, []);
+
+  const handleCopy = async (label: string) => {
+    try {
+      await navigator.clipboard.writeText(label);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Error al copiar:", err);
+    }
+  };
 
   return (
     <div className="w-full ml-[32px] ">
@@ -123,14 +134,23 @@ export const Pay = ({
         <div className="flex flex-col gap-3 items-center mb-[32px] mt-[32px] text-primary text-sm/5">
           <p className="flex flex-row items-center gap-2">
             Enviar <span className="font-bold">{crypto_amount}</span>{" "}
+            <button onClick={() => handleCopy(crypto_amount.toString())}>
+              <CopyIcon />
+            </button>
+          </p>
+          <p className="flex flex-row items-center gap-2">
+            {address}
+            <button onClick={() => handleCopy(address as string)}>
+              <CopyIcon />
+            </button>
+          </p>
+          <p className="flex flex-row items-center gap-2">
+            <AdIcon /> Etiqueta de destino: 2557164061
             <CopyIcon />
           </p>
-          <p className="flex flex-row items-center gap-2">
-            {address} <CopyIcon />
-          </p>
-          <p className="flex flex-row items-center gap-2">
-            <AdIcon /> Etiqueta de destino: 2557164061 <CopyIcon />
-          </p>
+          {copied && (
+            <span className="text-primary font-bold text-sm">¡Copiado!</span>
+          )}
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const Payment = ({
   title = "¡Pago completado!",
@@ -9,9 +10,13 @@ const Payment = ({
   title: string;
   image: string;
 }) => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const Pay = urlParams.keys().next().value;
+  const [Pay, setPay] = useState("");
   const route = useRouter();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    setPay(urlParams.keys().next().value as string);
+  }, []);
 
   return (
     <div className="flex justify-center items-center h-screen w-full">

@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import { Mulish } from "next/font/google";
 import Image from "next/image";
+import { Analytics } from "@vercel/analytics/react";
 
 const mulish = Mulish({
   variable: "--font-mulish",
@@ -23,6 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <div className={`${mulish.variable} ${mulish.className}`}>
         <Component {...pageProps} />
+        <Analytics />
         <footer className="flex justify-center items-center gap-4 h-fit fixed bottom-8 w-full ">
           <Image
             src="/bitnovo.svg"
